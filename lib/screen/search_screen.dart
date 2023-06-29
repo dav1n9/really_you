@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-
-import '../api/search_api.dart';
+import 'package:get/get.dart';
+import 'package:really_you/api/search_api.dart';
+import '../controller/search_num_controller.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,6 +14,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final numberController = TextEditingController();
+  late SearchNumController searchController;
   late SpamNum result;
 
   final String _searchQuery = '';
@@ -28,15 +30,13 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     final dio = Dio();
     client = SearchApi(dio);
+    searchController = Get.put(SearchNumController());
     super.initState();
   }
 
   Future<SpamNum> SpamNumFromJson(String num) async {
-    SpamNum result;
     SpamNum s = await client.getTasks(num);
     print(s.message);
-    // Map<String, dynamic> list = json.decode(s);
-    // result = (SpamNum.fromJson(list));
 
     return s;
   }
@@ -91,6 +91,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     // _searchPhoneNumber(_searchQuery);
                     result = await SpamNumFromJson(numberController.text);
                     print(result.numOfCall);
+                    searchController.setMessage(result.message!);
+                    searchController.setSpam(result.numOfCall!);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(int.parse('0xFF5A96E3')),
@@ -103,17 +105,21 @@ class _SearchScreenState extends State<SearchScreen> {
           const SizedBox(height: 16.0),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 30),
+              padding: const EdgeInsets.all(30),
               child: ListView.builder(
-                itemCount: filteredPhoneNumbers.length,
+                itemCount: 1,
                 itemBuilder: (context, index) {
-                  final phoneNumber = filteredPhoneNumbers[index];
-                  final deepVoiceNumber = filteredDeppNumbers[index];
                   return myTile = ListTile(
-                    title: Text(phoneNumber),
-                    subtitle: Text(deepVoiceNumber),
+                    title: Obx(() => Text(
+                          searchController.message.value,
+                          style: const TextStyle(fontSize: 21),
+                        )),
+                    subtitle: Obx(
+                      () => Text(
+                          "딥보이스 피싱 내역이 ${searchController.spam.value}건 있습니다."),
+                    ),
                     onTap: () {
-                      _callPhoneNumber(phoneNumber);
+                      _callPhoneNumber(numberController.text);
                     },
                   );
                 },
