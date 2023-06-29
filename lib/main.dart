@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:really_you/screen/search_screen.dart';
+import 'package:really_you/screen/upload_screen.dart';
 
 import 'screen/main_screen.dart';
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => const MainScreen(),
         "/search": (context) => const SearchScreen(),
+        "/upload": (context) => const UploadScreen(),
       },
     );
   }
