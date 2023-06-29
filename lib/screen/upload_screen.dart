@@ -1,7 +1,13 @@
+import 'dart:io';
 
+import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
+
+import '../controller/upload_controller.dart';
 
 class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
@@ -11,10 +17,15 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
+  late UploadController uploadController;
+
+  File selectedFile = File('');
+  //bool uploadVisibility = true;
+
   @override
   void initState() {
     getPermission();
-    //requestStoragePermission(context);
+    uploadController = Get.put(UploadController());
     super.initState();
   }
 
@@ -28,36 +39,35 @@ class _UploadScreenState extends State<UploadScreen> {
     }
   }
 
-  // uploadAudio() async {
-  //   final audioPath = await getFilePath(); // 오디오 파일 경로 가져오기
-  //   final file = File(audioPath);
-  //   print("uploadAudioFile: $file");
+  uploadAudio() async {
+    final file = await getFilePath();
+    print("uploadAudioFile: $file");
 
-  //   // 파일 업로드를 위한 서버 URL 설정
-  //   final url = Uri.parse('http://your-server-url.com/upload');
-  //   // 파일 업로드 요청 보내기
-  //   final response = await http.post(url, body: {
-  //     'file': file.readAsBytesSync(),
-  //   });
+    // 파일 업로드를 위한 서버 URL 설정
+    final url = Uri.parse('http://your-server-url.com/upload');
+    // 파일 업로드 요청 보내기
+    final response = await http.post(url, body: {
+      'file': file.readAsBytesSync(),
+    });
 
-  //   // 응답 확인
-  //   if (response.statusCode == 200) {
-  //     print('파일 업로드 성공');
-  //   } else {
-  //     print('파일 업로드 실패');
-  //   }
-  // }
+    // 응답 확인
+    if (response.statusCode == 200) {
+      print('파일 업로드 성공');
+    } else {
+      print('파일 업로드 실패');
+    }
+  }
 
-  // Future<File> getFilePath() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles();
+  Future<File> getFilePath() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-  //   if (result != null) {
-  //     File file = File(result.files.single.path!);
-  //     return file;
-  //   } else {
-  //     // User canceled th
-  //   }
-  // }
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      return file;
+    } else {
+      return File('');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,13 +78,63 @@ class _UploadScreenState extends State<UploadScreen> {
         elevation: 0,
         title: const Text('Upload Audio'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          uploadController.resetUploadVisibility();
+        },
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.refresh),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('UPLOAD'),
+            InkWell(
+              onTap: () {
+                // 파일 가져오기?
+                setState(() async {
+                  selectedFile = await getFilePath();
+                  if (selectedFile.path != '') {
+                    uploadController.changeUploadVisibility();
+                    print("업로드");
+                  }
+                });
+              },
+              child: Obx(
+                () => Visibility(
+                  visible: uploadController.uploadVisibility.value,
+                  child: DottedBorder(
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(12),
+                    padding: const EdgeInsets.all(6),
+                    dashPattern: const <double>[5, 3],
+                    color: Colors.blue.shade900,
+                    strokeWidth: 3,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      child: SizedBox(
+                        height: 200,
+                        width: MediaQuery.of(context).size.width,
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(Icons.folder_copy_outlined),
+                            ),
+                            Text(
+                              'UPLOAD',
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

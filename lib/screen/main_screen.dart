@@ -28,11 +28,11 @@ class _MainScreenState extends State<MainScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(
-                padding: EdgeInsets.fromLTRB(8, 20, 8, 0),
+                padding: EdgeInsets.fromLTRB(8, 25, 8, 0),
                 child: Text(
                   'DeepVoice를 탐지하세요!',
                   style: TextStyle(
-                    fontSize: 23,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -42,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: Text(
                   'DeepVoice를 탐지하세요!',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                   ),
                 ),
               ),
@@ -100,8 +100,27 @@ class _MainScreenState extends State<MainScreen> {
                   );
                 }).toList(),
               ),
-
-              //Text('App Directory Path: $_appDirectoryPath'),
+              Container(
+                padding: const EdgeInsets.fromLTRB(8, 30, 0, 0),
+                child: const Text(
+                  '도움이 필요하신가요?',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(8, 5, 0, 0),
+                child: const Text(
+                  '보이스피싱 피해 신고 : 000-0000',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(8, 5, 0, 0),
+                child: const Text(
+                  '보이스피싱 피해 신고 : 000-0000',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
             ],
           ),
         ),
