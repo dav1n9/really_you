@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:really_you/screen/search_screen.dart';
@@ -6,9 +7,11 @@ import 'package:really_you/screen/upload_screen.dart';
 
 import 'screen/main_screen.dart';
 
-void main() {
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized(); // 1번코드
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
