@@ -9,14 +9,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-
   String _searchQuery = '';
   List<String> _searchResults = [];
   List<String> _numResults = [];
   List<String> filteredPhoneNumbers = [];
   List<String> filteredDeppNumbers = [];
 
-  ListTile myTile = ListTile();
+  ListTile myTile = const ListTile();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,7 @@ class _SearchScreenState extends State<SearchScreen> {
         foregroundColor: Colors.black,
         elevation: 0,
         title: Padding(
-          padding: EdgeInsets.only(left: 65),
+          padding: const EdgeInsets.only(left: 65),
           child: Image.asset(
             'assets/images/logo.png',
             width: 120,
@@ -44,8 +43,8 @@ class _SearchScreenState extends State<SearchScreen> {
           Row(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(left: 40, right: 25),
-                child: Container(
+                padding: const EdgeInsets.only(left: 40, right: 25),
+                child: SizedBox(
                   width: 250,
                   child: TextField(
                     onChanged: (value) {
@@ -53,30 +52,30 @@ class _SearchScreenState extends State<SearchScreen> {
                         _searchQuery = value;
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: '전화번호 입력',
                     ),
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 15),
+                padding: const EdgeInsets.only(top: 15),
                 child: ElevatedButton(
-                          onPressed: () {
-                _searchPhoneNumber(_searchQuery);
-                          },
-                          style: ElevatedButton.styleFrom(
-                primary: Color(int.parse('0xFF5A96E3')),
-                          ),
-                          child: Text('검색'),
-                        ),
+                  onPressed: () {
+                    _searchPhoneNumber(_searchQuery);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(int.parse('0xFF5A96E3')),
+                  ),
+                  child: const Text('검색'),
+                ),
               ),
             ],
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left: 30),
+              padding: const EdgeInsets.only(left: 30),
               child: ListView.builder(
                 itemCount: filteredPhoneNumbers.length,
                 itemBuilder: (context, index) {
@@ -97,6 +96,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
+
   void _callPhoneNumber(String phoneNumber) async {
     bool res = await FlutterPhoneDirectCaller.callNumber(phoneNumber) ?? true;
     if (!res) {
@@ -122,7 +122,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-   void _searchPhoneNumber(_searchQuery) {
+  void _searchPhoneNumber(searchQuery) {
     // 여기에서 전화번호 검색 로직을 구현합니다.
     // 예시로 간단히 더미 데이터를 사용합니다.
     filteredPhoneNumbers = [];
@@ -139,10 +139,10 @@ class _SearchScreenState extends State<SearchScreen> {
         '딥페이크 피싱 내역이 2건 있습니다',
       ];
     });
-    
+
     int deppNum = 0;
     for (String phoneNumber in _searchResults) {
-      if (phoneNumber.contains(_searchQuery)) {
+      if (phoneNumber.contains(searchQuery)) {
         filteredPhoneNumbers.add(phoneNumber);
         filteredDeppNumbers.add(_numResults[deppNum]);
       }

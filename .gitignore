@@ -45,3 +45,5 @@ app.*.map.json
 
 # api
 *.env
+
+lib/api/search_api.dart
