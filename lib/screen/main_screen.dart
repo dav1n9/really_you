@@ -112,6 +112,12 @@ class _MainScreenState extends State<MainScreen> {
             },
             child: const Text('upload'),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed("/search");
+            },
+            child: const Text('upload'),
+          ),
           //Text('App Directory Path: $_appDirectoryPath'),
         ],
       ),
