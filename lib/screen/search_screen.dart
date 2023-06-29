@@ -17,6 +17,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   ListTile myTile = const ListTile();
 
+  final TextEditingController _textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,21 +45,28 @@ class _SearchScreenState extends State<SearchScreen> {
           Row(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 40, right: 25),
+                padding: const EdgeInsets.only(left: 30, right: 25),
                 child: SizedBox(
                   width: 250,
                   child: TextField(
+                    controller: _textEditingController,
                     onChanged: (value) {
                       setState(() {
                         _searchQuery = value;
                       });
                     },
                     decoration: const InputDecoration(
-                      labelText: '전화번호 입력',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(4))),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(4))),
+                      filled: true,
+                      hintText: '전화번호 입력',
+                      fillColor: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.only(top: 15),
                 child: ElevatedButton(
@@ -82,7 +91,17 @@ class _SearchScreenState extends State<SearchScreen> {
                   final phoneNumber = filteredPhoneNumbers[index];
                   final deepVoiceNumber = filteredDeppNumbers[index];
                   return myTile = ListTile(
-                    title: Text(phoneNumber),
+                    leading: Container(
+                      width: 30,
+                      height: 30,
+                      child: Image.asset("assets/images/warning_icon3.png")),
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 1),
+                        child: Text(phoneNumber),
+                      ),
+                    ),
                     subtitle: Text(deepVoiceNumber),
                     onTap: () {
                       _callPhoneNumber(phoneNumber);

@@ -37,9 +37,9 @@ class _MainScreenState extends State<MainScreen> {
                 const Padding(
                   padding: EdgeInsets.fromLTRB(8, 20, 8, 0),
                   child: Text(
-                    'DeepVoice를 탐지하세요!',
+                    'REALLYOU로 딥보이스를 탑지하세요!',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -47,9 +47,9 @@ class _MainScreenState extends State<MainScreen> {
                 const Padding(
                   padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
                   child: Text(
-                    'DeepVoice를 탐지하세요!',
+                    '남녀노소 속을 수 있는 딥보이스 피싱을 릴리유로 예방하세요.',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 14,
                     ),
                   ),
                 ),
@@ -76,7 +76,7 @@ class _MainScreenState extends State<MainScreen> {
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 5.0),
                               decoration: BoxDecoration(
-                                color: Colors.amber.shade50,
+                                color: Colors.blue,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Column(
