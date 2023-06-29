@@ -44,10 +44,16 @@ dependencies:
   flutter_native_splash: ^2.3.1
   carousel_slider: ^4.2.1
   dotted_border: ^2.0.0+3
+<<<<<<< HEAD
   json_annotation: ^4.8.1
   retrofit: ^4.0.1
   dio: ^5.2.1+1
   flutter_phone_direct_caller: ^2.1.1
+=======
+  dio: ^5.2.1+1
+  retrofit: ^4.0.1
+  flutter_dotenv: ^5.1.0
+>>>>>>> e1bdc9c7824607522253467af7326608dfc2528a
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +80,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo.png
+    - .env
   
   # assets:
   #   - images/a_dot_burr.jpeg
