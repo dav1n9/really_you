@@ -10,6 +10,8 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
+List<String> list = ["방금 대화 의심스러운데?", "의심번호를 조심하세요!"];
+
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 CarouselSlider(
                   options: CarouselOptions(
+                    
                     height: 180.0,
                     enableInfiniteScroll: false,
                   ),
@@ -71,43 +74,7 @@ class _MainScreenState extends State<MainScreen> {
                                 ? Navigator.of(context).pushNamed("/upload")
                                 : Navigator.of(context).pushNamed("/search");
                           },
-                          child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 5.0),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.topLeft,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(30, 30, 0, 0),
-                                    child: Text(
-                                      i,
-                                      style: const TextStyle(
-                                        fontSize: 35.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.end,
-                                    ),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.bottomRight,
-                                    padding: const EdgeInsets.all(10),
-                                    child: Icon(
-                                      (i == "upload")
-                                          ? Icons.phone_android
-                                          : Icons.search,
-                                      size: 70.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              )),
+                          child: (i == "upload")? upload() : search()
                         );
                       },
                     );
@@ -115,22 +82,30 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(8, 30, 0, 0),
-                  child: const Text(
+                  child: Text(
                     '도움이 필요하신가요?',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
+                // Container(
+                //   padding: EdgeInsets.fromLTRB(8, 13, 0, 0),
+                //   child: RichText(
+                //     text: TextSpan(
+                //       children: [
+                //         TextSpan(text: '보이스피싱 피해'),
+                //         TextSpan(text: '신고', style: TextStyle(fontWeight: FontWeight.bold)),
+                //         TextSpan(text: ': 110'),
+                //       ]
+                //     )),
+                //   // child: const Text(
+                //   //   '보이스피싱 피해 신고 : 110',
+                //   //   style: TextStyle(fontSize: 15),
+                //   // ),
+                // ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(8, 5, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(8, 20, 0, 0),
                   child: const Text(
-                    '보이스피싱 피해 신고 : 000-0000',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(8, 5, 0, 0),
-                  child: const Text(
-                    '보이스피싱 피해 신고 : 000-0000',
+                    '보이스피싱 피해 신고 : 1379',
                     style: TextStyle(fontSize: 15),
                   ),
                 ),
@@ -139,6 +114,118 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget upload() {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        margin:
+            const EdgeInsets.symmetric(horizontal: 5.0),
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 0, 62, 113),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              padding:
+                  EdgeInsets.fromLTRB(30, 30, 0, 0),
+              child: const Column(
+                children: <Widget>[
+                  Text(
+                  "방금 대화 의심스러운데?",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.end,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    "통화 내용을 업로드하여 딥보이스를 판별하세요.",
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+                ],
+              ),
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.all(10),
+              child: Icon(Icons.phone_android,
+                size: 70.0,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        )),
+    );
+  }
+
+  Widget search() {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        margin:
+            const EdgeInsets.symmetric(horizontal: 5.0),
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 16, 68, 70),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.topLeft,
+              padding:
+                  const EdgeInsets.fromLTRB(30, 30, 0, 0),
+              child: const Column(
+                children: [
+                  Text(
+                    "의심번호를 조심하세요!",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      "해당 전화번호의 피싱 내역을 조회할 수 있습니다.",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.all(10),
+              child: Icon(Icons.search,
+                size: 70.0,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        )),
     );
   }
 }

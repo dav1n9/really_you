@@ -76,7 +76,13 @@ class _UploadScreenState extends State<UploadScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
-        title: const Text('Upload Audio'),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 65),
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: 120,
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -108,19 +114,20 @@ class _UploadScreenState extends State<UploadScreen> {
                     radius: const Radius.circular(12),
                     padding: const EdgeInsets.all(6),
                     dashPattern: const <double>[5, 3],
-                    color: Colors.blue.shade900,
-                    strokeWidth: 3,
+                    color: Color.fromARGB(255, 0, 66, 165),
+                    strokeWidth: 2,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
                       child: SizedBox(
                         height: 200,
                         width: MediaQuery.of(context).size.width,
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Icon(Icons.folder_copy_outlined),
+                              child: Container(
+                                child: Image.asset('assets/images/upload_icon.png')),
                             ),
                             Text(
                               'UPLOAD',

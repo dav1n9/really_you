@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+
+import '../api/search_api.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -9,7 +12,10 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  String _searchQuery = '';
+  final numberController = TextEditingController();
+  late SpamNum result;
+
+  late String _searchQuery = '';
   List<String> _searchResults = [];
   List<String> _numResults = [];
   List<String> filteredPhoneNumbers = [];
@@ -18,6 +24,24 @@ class _SearchScreenState extends State<SearchScreen> {
   ListTile myTile = const ListTile();
 
   final TextEditingController _textEditingController = TextEditingController();
+
+  late final client;
+  @override
+  void initState() {
+    final dio = Dio();
+    client = SearchApi(dio);
+    super.initState();
+  }
+
+  Future<SpamNum> SpamNumFromJson(String num) async {
+    SpamNum result;
+    SpamNum s = await client.getTasks(num);
+    //print(s.message);
+    // Map<String, dynamic> list = json.decode(s);
+    // result = (SpamNum.fromJson(list));
+
+    return s;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,30 +72,41 @@ class _SearchScreenState extends State<SearchScreen> {
                 padding: const EdgeInsets.only(left: 30, right: 25),
                 child: SizedBox(
                   width: 250,
-                  child: TextField(
-                    controller: _textEditingController,
-                    onChanged: (value) {
-                      setState(() {
-                        _searchQuery = value;
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(4))),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(4))),
-                      filled: true,
-                      hintText: '전화번호 입력',
-                      fillColor: Colors.white,
+                  height: 70,
+                  // ignore: sort_child_properties_last
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10,top: 20.0),
+                    child: TextField(
+                      controller: _textEditingController,
+                      onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.all(Radius.circular(4))),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.all(Radius.circular(4))),
+                        filled: true,
+                        hintText: '전화번호 입력',
+                        fillColor: Colors.white,
+                        ),
                       ),
-                    ),
+                  ),
+                    // keyboardType: TextInputType.phone,
                   ),
                 ),
               Padding(
-                padding: const EdgeInsets.only(top: 15),
+                padding: const EdgeInsets.only(top: 25),
                 child: ElevatedButton(
-                  onPressed: () {
-                    _searchPhoneNumber(_searchQuery);
+                  onPressed: () async {
+                    // _searchPhoneNumber(_searchQuery);
+                    result = await SpamNumFromJson(numberController.text);
+                    int? number = result.numOfCall;
+                    String? num = result.message;
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(int.parse('0xFF5A96E3')),
