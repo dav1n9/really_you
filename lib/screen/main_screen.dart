@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:really_you/screen/main_background.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -104,9 +105,19 @@ class _MainScreenState extends State<MainScreen> {
                 // ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(8, 20, 0, 0),
-                  child: const Text(
-                    '보이스피싱 피해 신고 : 1379',
-                    style: TextStyle(fontSize: 15),
+                  child: GestureDetector(
+                    child: Text(
+                      '보이스피싱 피해 신고 : 1379',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    onTap: () {
+                      // String url = 'tel:$phoneNumber';
+                      // if (await canLaunch(url)) {
+                      //   await launch(url);
+                      // } else {
+                      //   throw '전화 걸기를 지원하지 않는 기기입니다.';
+                      // }
+                    },
                   ),
                 ),
               ],

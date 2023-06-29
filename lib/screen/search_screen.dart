@@ -23,6 +23,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   ListTile myTile = const ListTile();
 
+  // late final SpamNum spamNum;
+
   final TextEditingController _textEditingController = TextEditingController();
 
   late final client;
@@ -105,8 +107,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   onPressed: () async {
                     // _searchPhoneNumber(_searchQuery);
                     result = await SpamNumFromJson(numberController.text);
-                    int? number = result.numOfCall;
-                    String? num = result.message;
+                    String? number = result.message;
+                    int? num = result.numOfCall;
+                    // print(number);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(int.parse('0xFF5A96E3')),
@@ -130,17 +133,15 @@ class _SearchScreenState extends State<SearchScreen> {
                       width: 30,
                       height: 30,
                       child: Image.asset("assets/images/warning_icon3.png")),
+                    
                     title: Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 1),
-                        child: Text(phoneNumber),
-                      ),
+                      child: Text(result.message.toString()),
                     ),
-                    subtitle: Text(deepVoiceNumber),
-                    onTap: () {
-                      _callPhoneNumber(phoneNumber);
-                    },
+                    //subtitle: Text(deepVoiceNumber),
+                    // onTap: () {
+                    //   _callPhoneNumber(phoneNumber);
+                    // },
                   );
                 },
               ),
@@ -151,56 +152,67 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  void _callPhoneNumber(String phoneNumber) async {
-    bool res = await FlutterPhoneDirectCaller.callNumber(phoneNumber) ?? true;
-    if (!res) {
-      // 전화 걸기 실패 처리
-      // ignore: use_build_context_synchronously
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('딥보이스 피싱 내역'),
-            content: const Text('딥보이프 피싱이 1건 있습니다.'),
-            actions: [
-              TextButton(
-                child: const Text('닫기'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
+  Widget getMsg() {
+    switch(result.message.toString()) {
+      case ("해당 전화번호는 딥보이스 이력이 있는 번호 입니다."):
+        break;
+    }
+      return Scaffold(
+        body: Text(result.message.toString()),
       );
     }
   }
 
-  void _searchPhoneNumber(searchQuery) {
-    // 여기에서 전화번호 검색 로직을 구현합니다.
-    // 예시로 간단히 더미 데이터를 사용합니다.
-    filteredPhoneNumbers = [];
-    filteredDeppNumbers = [];
-    setState(() {
-      _searchResults = [
-        '123-456-7890',
-        '987-654-3210',
-        '555-123-4567',
-      ];
-      _numResults = [
-        '딥페이크 피싱 내역이 1건 있습니다',
-        '딥페이크 피싱 내역이 2건 있습니다',
-        '딥페이크 피싱 내역이 2건 있습니다',
-      ];
-    });
+  // void _callPhoneNumber(String phoneNumber) async {
+  //   bool res = await FlutterPhoneDirectCaller.callNumber(phoneNumber) ?? true;
+  //   if (!res) {
+  //     // 전화 걸기 실패 처리
+  //     // ignore: use_build_context_synchronously
+  //     showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           title: const Text('딥보이스 피싱 내역'),
+  //           content: const Text('딥보이프 피싱이 1건 있습니다.'),
+  //           actions: [
+  //             TextButton(
+  //               child: const Text('닫기'),
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //               },
+  //             ),
+  //           ],
+  //         );
+  //       },
+  //     );
+  //   }
+  // }
 
-    int deppNum = 0;
-    for (String phoneNumber in _searchResults) {
-      if (phoneNumber.contains(searchQuery)) {
-        filteredPhoneNumbers.add(phoneNumber);
-        filteredDeppNumbers.add(_numResults[deppNum]);
-      }
-      deppNum++;
-    }
-  }
-}
+  // void _searchPhoneNumber(searchQuery) {
+  //   // 여기에서 전화번호 검색 로직을 구현합니다.
+  //   // 예시로 간단히 더미 데이터를 사용합니다.
+  //   filteredPhoneNumbers = [];
+  //   filteredDeppNumbers = [];
+  //   setState(() {
+  //     _searchResults = [
+  //       '123-456-7890',
+  //       '987-654-3210',
+  //       '555-123-4567',
+  //     ];
+  //     _numResults = [
+  //       '딥페이크 피싱 내역이 1건 있습니다',
+  //       '딥페이크 피싱 내역이 2건 있습니다',
+  //       '딥페이크 피싱 내역이 2건 있습니다',
+  //     ];
+  //   });
+
+  //   int deppNum = 0;
+  //   for (String phoneNumber in _searchResults) {
+  //     if (phoneNumber.contains(searchQuery)) {
+  //       filteredPhoneNumbers.add(phoneNumber);
+  //       filteredDeppNumbers.add(_numResults[deppNum]);
+  //     }
+  //     deppNum++;
+  //   }
+  // }
+// }
