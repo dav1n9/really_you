@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-
-import '../api/search_api.dart';
+import 'package:get/get.dart';
+import 'package:really_you/api/search_api.dart';
+import '../controller/search_num_controller.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,6 +14,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final numberController = TextEditingController();
+  late SearchNumController searchController;
   late SpamNum result;
 
   late String _searchQuery = '';
@@ -32,16 +34,13 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     final dio = Dio();
     client = SearchApi(dio);
+    searchController = Get.put(SearchNumController());
     super.initState();
   }
 
   Future<SpamNum> SpamNumFromJson(String num) async {
-    SpamNum result;
     SpamNum s = await client.getTasks(num);
-    //print(s.message);
-    // Map<String, dynamic> list = json.decode(s);
-    // result = (SpamNum.fromJson(list));
-
+    print(s.message);
     return s;
   }
 
@@ -107,9 +106,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   onPressed: () async {
                     // _searchPhoneNumber(_searchQuery);
                     result = await SpamNumFromJson(numberController.text);
-                    String? number = result.message;
-                    int? num = result.numOfCall;
-                    // print(number);
+
+                    print(result.numOfCall);
+                    searchController.setMessage(result.message!);
+                    searchController.setSpam(result.numOfCall!);
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(int.parse('0xFF5A96E3')),
@@ -122,12 +123,10 @@ class _SearchScreenState extends State<SearchScreen> {
           const SizedBox(height: 16.0),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 30),
+              padding: const EdgeInsets.all(30),
               child: ListView.builder(
-                itemCount: filteredPhoneNumbers.length,
+                itemCount: 1,
                 itemBuilder: (context, index) {
-                  final phoneNumber = filteredPhoneNumbers[index];
-                  final deepVoiceNumber = filteredDeppNumbers[index];
                   return myTile = ListTile(
                     leading: Container(
                       width: 30,
@@ -136,12 +135,18 @@ class _SearchScreenState extends State<SearchScreen> {
                     
                     title: Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: Text(result.message.toString()),
+                      child: Obx(() => Text(
+                          searchController.message.value,
+                          style: const TextStyle(fontSize: 21),
+                        )),
                     ),
-                    //subtitle: Text(deepVoiceNumber),
-                    // onTap: () {
-                    //   _callPhoneNumber(phoneNumber);
-                    // },
+                    subtitle: Obx(
+                      () => Text(
+                          "딥보이스 피싱 내역이 ${searchController.spam.value}건 있습니다."),
+                    ),
+                    onTap: () {
+                      _callPhoneNumber(numberController.text);
+                    },
                   );
                 },
               ),
@@ -152,67 +157,30 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget getMsg() {
-    switch(result.message.toString()) {
-      case ("해당 전화번호는 딥보이스 이력이 있는 번호 입니다."):
-        break;
-    }
-      return Scaffold(
-        body: Text(result.message.toString()),
+
+  void _callPhoneNumber(String phoneNumber) async {
+    bool res = await FlutterPhoneDirectCaller.callNumber(phoneNumber) ?? true;
+    if (!res) {
+      // 전화 걸기 실패 처리
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('딥보이스 피싱 내역'),
+            content: const Text('딥보이프 피싱이 1건 있습니다.'),
+            actions: [
+              TextButton(
+                child: const Text('닫기'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
       );
     }
   }
-
-  // void _callPhoneNumber(String phoneNumber) async {
-  //   bool res = await FlutterPhoneDirectCaller.callNumber(phoneNumber) ?? true;
-  //   if (!res) {
-  //     // 전화 걸기 실패 처리
-  //     // ignore: use_build_context_synchronously
-  //     showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: const Text('딥보이스 피싱 내역'),
-  //           content: const Text('딥보이프 피싱이 1건 있습니다.'),
-  //           actions: [
-  //             TextButton(
-  //               child: const Text('닫기'),
-  //               onPressed: () {
-  //                 Navigator.of(context).pop();
-  //               },
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     );
-  //   }
-  // }
-
-  // void _searchPhoneNumber(searchQuery) {
-  //   // 여기에서 전화번호 검색 로직을 구현합니다.
-  //   // 예시로 간단히 더미 데이터를 사용합니다.
-  //   filteredPhoneNumbers = [];
-  //   filteredDeppNumbers = [];
-  //   setState(() {
-  //     _searchResults = [
-  //       '123-456-7890',
-  //       '987-654-3210',
-  //       '555-123-4567',
-  //     ];
-  //     _numResults = [
-  //       '딥페이크 피싱 내역이 1건 있습니다',
-  //       '딥페이크 피싱 내역이 2건 있습니다',
-  //       '딥페이크 피싱 내역이 2건 있습니다',
-  //     ];
-  //   });
-
-  //   int deppNum = 0;
-  //   for (String phoneNumber in _searchResults) {
-  //     if (phoneNumber.contains(searchQuery)) {
-  //       filteredPhoneNumbers.add(phoneNumber);
-  //       filteredDeppNumbers.add(_numResults[deppNum]);
-  //     }
-  //     deppNum++;
-  //   }
-  // }
-// }
+}
+ 
